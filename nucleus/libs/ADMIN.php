@@ -29,15 +29,29 @@ class ADMIN {
     /**
      * @var string $action action currently being executed ($action=xxxx -> action_xxxx method)
      */
-    var $action;
-
+    public $action;
+    protected $adminXML;
+    
     /**
      * Class constructor
      */
-    function ADMIN() {
+    function __construct() {
 
     }
 
+    
+    /* NewNu functions */
+
+    
+    
+    protected function niceOutput(){
+        $dom = new DOMDocument();
+        $dom->loadXML($this->adminXML->asXML());
+        $dom->formatOutput = true;
+        return $dom->saveXML();
+    }
+    
+    
     /**
      * Executes an action
      *
@@ -5292,87 +5306,117 @@ selector();
         $this->error(_ERROR_DISALLOWED);
     }
 
+    
+ 
+    
+    
     /**
      * @todo document this
      */
-    function pagehead($extrahead = '') {
+    public function pagehead($extrahead = '') {
         global $member, $nucleus, $CONF, $manager;
 
-		$data = array(
-			'extrahead'	=> &$extrahead,
-			'action'	=> $this->action
-		);
-		$manager->notify('AdminPrePageHead', $data);
+        $data = array(
+                'extrahead'	=> &$extrahead,
+                'action'	=> $this->action
+        );
+        $manager->notify('AdminPrePageHead', $data);
 
         $baseUrl = htmlspecialchars($CONF['AdminURL']);
-		if (!array_key_exists('AdminCSS',$CONF)) 
-		{
-			sql_query("INSERT INTO ".sql_table('config')." VALUES ('AdminCSS', 'original')");
-			$CONF['AdminCSS'] = 'original';
-		}
 
-        ?>
-        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-        <html <?php echo _HTML_XML_NAME_SPACE_AND_LANG_CODE; ?>>
-        <head>
-            <meta http-equiv="Content-Type" content="text/html; charset=<?php echo _CHARSET ?>" />
-            <title><?php echo htmlspecialchars($CONF['SiteName'])?> - Admin</title>
-            <link rel="stylesheet" title="Nucleus Admin Default" type="text/css" href="<?php echo $baseUrl?>styles/admin_<?php echo $CONF["AdminCSS"]?>.css" />
-            <link rel="stylesheet" title="Nucleus Admin Default" type="text/css"
-            href="<?php echo $baseUrl?>styles/addedit.css" />
+        if (!array_key_exists('AdminCSS',$CONF)) 
+        {
+                sql_query("INSERT INTO ".sql_table('config')." VALUES ('AdminCSS', 'original')");
+                $CONF['AdminCSS'] = 'original';
+        }
 
-            <script type="text/javascript" src="<?php echo $baseUrl?>javascript/edit.js"></script>
-            <script type="text/javascript" src="<?php echo $baseUrl?>javascript/admin.js"></script>
-            <script type="text/javascript" src="<?php echo $baseUrl?>javascript/compatibility.js"></script>
 
-      <meta http-equiv='Pragma' content='no-cache' />
-      <meta http-equiv='Cache-Control' content='no-cache, must-revalidate' />
-      <meta http-equiv='Expires' content='-1' />
-
-            <?php echo $extrahead?>
-        </head>
-        <body>
-        <div id="adminwrapper">
-        <div class="header">
-        <h1><?php echo htmlspecialchars($CONF['SiteName'])?></h1>
-        </div>
-        <div id="container">
-        <div id="content">
-        <div class="loginname">
-        <?php           if ($member->isLoggedIn())
-                echo _LOGGEDINAS . ' ' . $member->getDisplayName()
+        $title=htmlspecialchars($CONF['SiteName']);
+        
+        // Set the details output
+        $details = '';
+        if ($member->isLoggedIn()){
+            $details .=  _LOGGEDINAS . ' ' . $member->getDisplayName()
                     ." - <a href='index.php?action=logout'>" . _LOGOUT. "</a>"
                     . "<br /><a href='index.php?action=overview'>" . _ADMINHOME . "</a> - ";
-            else
-                echo '<a href="index.php?action=showlogin" title="Log in">' , _NOTLOGGEDIN , '</a> <br />';
+        }else{
+            $details .=  '<a href="index.php?action=showlogin" title="Log in">' , _NOTLOGGEDIN , '</a> <br />';
+        }
+        $details .=  "<a href='".$CONF['IndexURL']."'>"._YOURSITE."</a>";
 
-            echo "<a href='".$CONF['IndexURL']."'>"._YOURSITE."</a>";
+        $details .=  '<br />(';
 
-            echo '<br />(';
+        $codenamestring = ($nucleus['codename']!='')? ' &quot;'.$nucleus['codename'].'&quot;':'';
 
-            $codenamestring = ($nucleus['codename']!='')? ' &quot;'.$nucleus['codename'].'&quot;':'';
-
-            if ($member->isLoggedIn() && $member->isAdmin()) {
-                $checkURL = sprintf(_ADMIN_SYSTEMOVERVIEW_VERSIONCHECK_URL, getNucleusVersion(), getNucleusPatchLevel());
-                echo '<a href="' . $checkURL . '" title="' . _ADMIN_SYSTEMOVERVIEW_VERSIONCHECK_TITLE . '">Nucleus CMS ' . $nucleus['version'] . $codenamestring . '</a>';
-                $newestVersion = getLatestVersion();
-                $newestCompare = str_replace('/','.',$newestVersion);
-                $currentVersion = str_replace(array('/','v'),array('.',''),$nucleus['version']);
-                if ($newestVersion && version_compare($newestCompare,$currentVersion) > 0) {
-                    echo '<br /><a style="color:red" href="http://nucleuscms.org/upgrade.php" title="'._ADMIN_SYSTEMOVERVIEW_LATESTVERSION_TITLE.'">'._ADMIN_SYSTEMOVERVIEW_LATESTVERSION_TEXT.$newestVersion.'</a>';
-                }
-            } else {
-                echo 'Nucleus CMS ' . $nucleus['version'] . $codenamestring;
+        if ($member->isLoggedIn() && $member->isAdmin()) {
+            $checkURL = sprintf(_ADMIN_SYSTEMOVERVIEW_VERSIONCHECK_URL, getNucleusVersion(), getNucleusPatchLevel());
+            $details .=  '<a href="' . $checkURL . '" title="' . _ADMIN_SYSTEMOVERVIEW_VERSIONCHECK_TITLE . '">Nucleus CMS ' . $nucleus['version'] . $codenamestring . '</a>';
+            $newestVersion = getLatestVersion();
+            $newestCompare = str_replace('/','.',$newestVersion);
+            $currentVersion = str_replace(array('/','v'),array('.',''),$nucleus['version']);
+            if ($newestVersion && version_compare($newestCompare,$currentVersion) > 0) {
+                $details .=  '<br /><a style="color:red" href="http://nucleuscms.org/upgrade.php" title="'._ADMIN_SYSTEMOVERVIEW_LATESTVERSION_TITLE.'">'._ADMIN_SYSTEMOVERVIEW_LATESTVERSION_TEXT.$newestVersion.'</a>';
             }
-            echo ')';
-        echo '</div>';
+        } else {
+            $details .=  'Nucleus CMS ' . $nucleus['version'] . $codenamestring;
+        }
+        $details .=  ')';
+                
+        $foot = $this->pagefoot();
+                
+       $doc = <<<EOF
+            <?xml version="1.0" encoding="UTF-8"?>
+            <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+            <html {_HTML_XML_NAME_SPACE_AND_LANG_CODE}>
+
+
+                <head>
+                    <meta http-equiv="Content-Type" content="text/html; charset={<?php echo }_CHARSET}" />
+                    <title>{$title} - Admin</title>
+                    <link rel="stylesheet" title="Nucleus Admin Default" type="text/css" href="{$baseUrl}styles/admin_{$CONF["AdminCSS"]}.css" />
+                    <link rel="stylesheet" title="Nucleus Admin Default" type="text/css"
+                    href="{$baseUrl}styles/addedit.css" />
+
+                    <script type="text/javascript" src="{$baseUrl}javascript/edit.js"></script>
+                    <script type="text/javascript" src="{$baseUrl}javascript/admin.js"></script>
+                    <script type="text/javascript" src="{$baseUrl}javascript/compatibility.js"></script>
+
+                    <meta http-equiv='Pragma' content='no-cache' />
+                    <meta http-equiv='Cache-Control' content='no-cache, must-revalidate' />
+                    <meta http-equiv='Expires' content='-1' />
+
+                    {$extrahead}
+                    </head>
+                    <body>
+                        <div id="adminwrapper">
+                            <div class="header">
+                                <h1>{$title}</h1>
+                            </div>
+                            <div id="container">
+                                <div id="content">
+                                    <div class="loginname">
+                                    {$details}
+                                    </div>
+                                {$foot}
+                        
+EOF;
+                     
+        $this->adminXML = new SimpleXMLElement($doc);
+        $data = array(
+                'AdminXML'	=> &$this->adminXML,
+                'action'	=> $this->action
+        );
+        $manager->notify('AdminXMLPageHead', $data);
     }
 
     /**
      * @todo document this
+     * @depreciated: AdminPrePageFoot
+     * @todo: set protected or private
      */
-    function pagefoot() {
+    public function pagefoot() {
         global $action, $member, $manager;
+        $doc = '';
 
 		$data = array(
 			'action' => $this->action
@@ -5380,33 +5424,33 @@ selector();
 		$manager->notify('AdminPrePageFoot', $data);
 
         if ($member->isLoggedIn() && ($action != 'showlogin')) {
-            ?>
-            <h2><?php echo  _LOGOUT ?></h2>
+            $doc .= "
+            <h2>{_LOGOUT}</h2>
             <ul>
-                <li><a href="index.php?action=overview"><?php echo  _BACKHOME?></a></li>
-                <li><a href='index.php?action=logout'><?php echo  _LOGOUT?></a></li>
-            </ul>
-            <?php       }
-        ?>
-            <div class="foot">
-                <a href="<?php echo _ADMINPAGEFOOT_OFFICIALURL ?>">Nucleus CMS</a> &copy; 2002-<?php echo date('Y') . ' ' . _ADMINPAGEFOOT_COPYRIGHT; ?>
+                <li><a href='index.php?action=overview'>{_BACKHOME}</a></li>
+                <li><a href='index.php?action=logout'>{_LOGOUT}</a></li>
+            </ul>";
+        }
+        $doc .= "
+            <div class='foot'>
+                <a href='{_ADMINPAGEFOOT_OFFICIALURL}'>Nucleus CMS</a> &copy; 2002-{date('Y')} {_ADMINPAGEFOOT_COPYRIGHT}
                 -
-                <a href="<?php echo _ADMINPAGEFOOT_DONATEURL ?>"><?php echo _ADMINPAGEFOOT_DONATE ?></a>
+                <a href='{ADMINPAGEFOOT_DONATEURL}'>{_ADMINPAGEFOOT_DONATE}</a>
             </div>
 
             </div><!-- content -->
 
-            <div id="quickmenu">
-
-                <?php               // ---- user settings ----
+                <div id='quickmenu'>
+        ";
+       // ---- user settings ----
                 if (($action != 'showlogin') && ($member->isLoggedIn())) {
-                    echo '<ul>';
-                    echo '<li><a href="index.php?action=overview">',_QMENU_HOME,'</a></li>';
-                    echo '</ul>';
+                    $doc .= '<ul>';
+                    $doc .= "<li><a href='index.php?action=overview'>{_QMENU_HOME}</a></li>";
+                    $doc .= '</ul>';
 
-                    echo '<h2>',_QMENU_ADD,'</h2>';
-                    echo '<form method="get" action="index.php"><div>';
-                    echo '<input type="hidden" name="action" value="createitem" />';
+                    $doc .= "<h2>{_QMENU_ADD}</h2>";
+                    $doc .= '<form method="get" action="index.php"><div>';
+                    $doc .= '<input type="hidden" name="action" value="createitem" />';
 
                         $showAll = requestVar('showall');
                         if (($member->isAdmin()) && ($showAll == 'yes')) {
@@ -5429,14 +5473,14 @@ selector();
                         $template['javascript'] = 'onchange="return form.submit()"';
                         showlist($query,'select',$template);
 
-                    echo '</div></form>';
+                    $doc .= '</div></form>';
 
-                    echo '<h2>' . $member->getDisplayName(). '</h2>';
-                    echo '<ul>';
-                    echo '<li><a href="index.php?action=editmembersettings">' . _QMENU_USER_SETTINGS . '</a></li>';
-                    echo '<li><a href="index.php?action=browseownitems">' . _QMENU_USER_ITEMS . '</a></li>';
-                    echo '<li><a href="index.php?action=browseowncomments">' . _QMENU_USER_COMMENTS . '</a></li>';
-                    echo '</ul>';
+                    $doc .= '<h2>' . $member->getDisplayName(). '</h2>';
+                    $doc .= '<ul>';
+                    $doc .= '<li><a href="index.php?action=editmembersettings">' . _QMENU_USER_SETTINGS . '</a></li>';
+                    $doc .= '<li><a href="index.php?action=browseownitems">' . _QMENU_USER_ITEMS . '</a></li>';
+                    $doc .= '<li><a href="index.php?action=browseowncomments">' . _QMENU_USER_COMMENTS . '</a></li>';
+                    $doc .= '</ul>';
 
 
 
@@ -5444,24 +5488,24 @@ selector();
                     // ---- general settings ----
                     if ($member->isAdmin()) {
 
-                        echo '<h2>',_QMENU_MANAGE,'</h2>';
+                        $doc .= '<h2>',_QMENU_MANAGE,'</h2>';
 
-                        echo '<ul>';
-                        echo '<li><a href="index.php?action=actionlog">' . _QMENU_MANAGE_LOG . '</a></li>';
-                        echo '<li><a href="index.php?action=settingsedit">' . _QMENU_MANAGE_SETTINGS . '</a></li>';
-                        echo '<li><a href="index.php?action=systemoverview">' . _QMENU_MANAGE_SYSTEM . '</a></li>';
-                        echo '<li><a href="index.php?action=usermanagement">' . _QMENU_MANAGE_MEMBERS . '</a></li>';
-                        echo '<li><a href="index.php?action=createnewlog">' . _QMENU_MANAGE_NEWBLOG . '</a></li>';
-                        echo '<li><a href="index.php?action=backupoverview">' . _QMENU_MANAGE_BACKUPS . '</a></li>';
-                        echo '<li><a href="index.php?action=pluginlist">' . _QMENU_MANAGE_PLUGINS . '</a></li>';
-                        echo '</ul>';
+                        $doc .= '<ul>';
+                        $doc .= '<li><a href="index.php?action=actionlog">' . _QMENU_MANAGE_LOG . '</a></li>';
+                        $doc .= '<li><a href="index.php?action=settingsedit">' . _QMENU_MANAGE_SETTINGS . '</a></li>';
+                        $doc .= '<li><a href="index.php?action=systemoverview">' . _QMENU_MANAGE_SYSTEM . '</a></li>';
+                        $doc .= '<li><a href="index.php?action=usermanagement">' . _QMENU_MANAGE_MEMBERS . '</a></li>';
+                        $doc .= '<li><a href="index.php?action=createnewlog">' . _QMENU_MANAGE_NEWBLOG . '</a></li>';
+                        $doc .= '<li><a href="index.php?action=backupoverview">' . _QMENU_MANAGE_BACKUPS . '</a></li>';
+                        $doc .= '<li><a href="index.php?action=pluginlist">' . _QMENU_MANAGE_PLUGINS . '</a></li>';
+                        $doc .= '</ul>';
 
-                        echo '<h2>',_QMENU_LAYOUT,'</h2>';
-                        echo '<ul>';
-                        echo '<li><a href="index.php?action=skinoverview">' . _QMENU_LAYOUT_SKINS . '</a></li>';
-                        echo '<li><a href="index.php?action=templateoverview">' . _QMENU_LAYOUT_TEMPL . '</a></li>';
-                        echo '<li><a href="index.php?action=skinieoverview">' . _QMENU_LAYOUT_IEXPORT . '</a></li>';
-                        echo '</ul>';
+                        $doc .= '<h2>'._QMENU_LAYOUT.'</h2>';
+                        $doc .= '<ul>';
+                        $doc .= '<li><a href="index.php?action=skinoverview">' . _QMENU_LAYOUT_SKINS . '</a></li>';
+                        $doc .= '<li><a href="index.php?action=templateoverview">' . _QMENU_LAYOUT_TEMPL . '</a></li>';
+                        $doc .= '<li><a href="index.php?action=skinieoverview">' . _QMENU_LAYOUT_IEXPORT . '</a></li>';
+                        $doc .= '</ul>';
 
                     }
 
@@ -5472,34 +5516,35 @@ selector();
 					$manager->notify('QuickMenu', $data);
                     if (count($aPluginExtras) > 0)
                     {
-                        echo '<h2>', _QMENU_PLUGINS, '</h2>';
-                        echo '<ul>';
+                        $doc .= '<h2>'. _QMENU_PLUGINS. '</h2>';
+                        $doc .= '<ul>';
                         foreach ($aPluginExtras as $aInfo)
                         {
-                            echo '<li><a href="'.htmlspecialchars($aInfo['url']).'" title="'.htmlspecialchars($aInfo['tooltip']).'">'.htmlspecialchars($aInfo['title']).'</a></li>';
+                            $doc .= '<li><a href="'.htmlspecialchars($aInfo['url']).'" title="'.htmlspecialchars($aInfo['tooltip']).'">'.htmlspecialchars($aInfo['title']).'</a></li>';
                         }
-                        echo '</ul>';
+                        $doc .= '</ul>';
                     }
 
                 } else if (($action == 'activate') || ($action == 'activatesetpwd')) {
 
-                    echo '<h2>', _QMENU_ACTIVATE, '</h2>', _QMENU_ACTIVATE_TEXT;
+                    $doc .= '<h2>'. _QMENU_ACTIVATE. '</h2>'. _QMENU_ACTIVATE_TEXT;
                 } else {
                     // introduction text on login screen
-                    echo '<h2>', _QMENU_INTRO, '</h2>', _QMENU_INTRO_TEXT;
+                    $doc .= '<h2>'. _QMENU_INTRO. '</h2>'. _QMENU_INTRO_TEXT;
                 }
-                ?>
+                $doc .= "
             </div>
 
             <!-- content / quickmenu container -->
-            <div class="clear"></div>    <!-- new -->
+            <div class='clear'></div>    <!-- new -->
             </div>
 
             <!-- adminwrapper -->    <!-- new -->
             </div>     <!-- new -->
             </body> 
-            </html>
-        <?php   }
+            </html>";
+                return $doc;
+        }
 
     /**
      * @todo document this
@@ -6647,4 +6692,3 @@ selector();
 
 } // class ADMIN
 
-?>
