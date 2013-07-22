@@ -31,11 +31,12 @@ class ADMIN {
      */
     public $action;
     protected $adminXML;
+    public $branched = true; //test value
     
     /**
      * Class constructor
      */
-    function __construct() {
+    public function __construct() {
 
     }
 
@@ -6499,20 +6500,14 @@ EOF;
         $extrahead = '<script type="text/javascript" src="javascript/numbercheck.js"></script>';
         $pluginName = htmlspecialchars(getPluginNameFromPid($pid), ENT_QUOTES);
         $this->pagehead($extrahead);
-
-        ?>
-            <p><a href="index.php?action=pluginlist">(<?php echo _PLUGS_BACK?>)</a></p>
-
-            <h2><?php echo sprintf(_PLUGIN_OPTIONS_TITLE, $pluginName) ?></h2>
-
-            <?php if  ($message) echo $message?>
-
-            <form action="index.php" method="post">
-            <div>
-                <input type="hidden" name="action" value="pluginoptionsupdate" />
-                <input type="hidden" name="plugid" value="<?php echo $pid?>" />
-
-        <?php
+        $doc = '';
+        $doc .= "<p><a href=\"index.php?action=pluginlist\">({_PLUGS_BACK})</a></p>";
+        $doc .= "<h2>" . sprintf(_PLUGIN_OPTIONS_TITLE, $pluginName) . "</h2>";
+        if  ($message) {$doc .= "<div class='message'>" . $message . '</div>';}
+        $doc .= '<form action="index.php" method="post">';
+        $doc .= '<div>';
+        $doc .= '<input type="hidden" name="action" value="pluginoptionsupdate" />';
+        $doc .= '<input type="hidden" name="plugid" value="' .$pid .'" />';
 
         $manager->addTicketHidden();
 
@@ -6549,15 +6544,11 @@ EOF;
 
         $template['content'] = 'plugoptionlist';
         $amount = showlist($aOptions,'table',$template);
-        if ($amount == 0)
-            echo '<p>',_ERROR_NOPLUGOPTIONS,'</p>';
+        if ($amount == 0){
+            $doc .= '<p>'._ERROR_NOPLUGOPTIONS.'</p>';
+        }
 
-        ?>
-            </div>
-            </form>
-        <?php       $this->pagefoot();
-
-
+        $doc .= '</div></form>';
 
     }
 
