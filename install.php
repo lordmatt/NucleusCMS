@@ -37,7 +37,7 @@ include('./install_lang_english.php');
 //
 // example:
 //     array('NP_TrackBack', 'NP_MemberGoodies')
-$aConfPlugsToInstall = array('NP_SkinFiles','NP_SecurityEnforcer','NP_Text');
+$aConfPlugsToInstall = array('NP_SkinFiles','NP_SecurityEnforcer','NP_Text','NP_Ping');
 
 
 // array with skins to install. skins must be present under the skins/ directory with
