@@ -12,4 +12,4 @@ if (!function_exists('getmtime'))
 // For benchmarking
 global $StartTime;
 $StartTime = getmtime();
-?>
+
