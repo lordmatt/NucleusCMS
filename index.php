@@ -10,4 +10,3 @@ include('./config.php');
 
 selector();
 
-?>

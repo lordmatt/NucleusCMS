@@ -39,4 +39,3 @@ if (!@file_exists($DIR_LIBS . 'globalfunctions.php')) {
 // include libs
 include($DIR_LIBS.'globalfunctions.php');
 
-?>
