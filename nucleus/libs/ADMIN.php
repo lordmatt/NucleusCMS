@@ -5314,9 +5314,19 @@ selector();
     /**
      * @todo document this
      */
-    public function pagehead($extrahead = '') {
+    public function pagehead($extrahead = ''){
+        
+        $this->extrahead=$extrahead;
+        ob_start(array('this', 'truepagehead'));
+    }
+    
+    public function truepagehead($innerdoc='') {
         global $member, $nucleus, $CONF, $manager;
-
+        if(isset($this->extrahead)){
+           $extrahead=$this->extrahead;
+        }else{
+           $extrahead='';            
+        }
         $data = array(
                 'extrahead'	=> &$extrahead,
                 'action'	=> $this->action
@@ -5362,9 +5372,11 @@ selector();
             $details .=  'Nucleus CMS ' . $nucleus['version'] . $codenamestring;
         }
         $details .=  ')';
-                
-        $foot = $this->pagefoot();
-                
+        if( isset($this->pre_foot)){
+            $foot=$this->pre_foot;  //we're in call back hack
+        }else{
+            $foot = $this->pagefoot(); // we're doing it right
+        }  
        $doc = <<<EOF
             <?xml version="1.0" encoding="UTF-8"?>
             <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -5398,6 +5410,7 @@ selector();
                                     <div class="loginname">
                                     {$details}
                                     </div>
+                                {$innerdoc}
                                 {$foot}
                         
 EOF;
@@ -5407,7 +5420,8 @@ EOF;
                 'AdminXML'	=> &$this->adminXML,
                 'action'	=> $this->action
         );
-        $manager->notify('AdminXMLPageHead', $data);
+        $manager->notify('AdminXML', $data);
+        return $this->niceOutput();
     }
 
     /**
@@ -5415,7 +5429,13 @@ EOF;
      * @depreciated: AdminPrePageFoot
      * @todo: set protected or private
      */
-    public function pagefoot() {
+    
+    public function pagefoot(){
+        $this->pre_foot = $this->truepagefoot();
+        ob_flush();
+    }
+    
+    public function truepagefoot() {
         global $action, $member, $manager;
         $doc = '';
 
@@ -5472,7 +5492,10 @@ EOF;
                         $template['shorten'] = 10;
                         $template['shortenel'] = '';
                         $template['javascript'] = 'onchange="return form.submit()"';
-                        showlist($query,'select',$template);
+                        ob_start();
+                            showlist($query,'select',$template); 
+                            $doc.=ob_get_contents();
+                        ob_end_clean();
 
                     $doc .= '</div></form>';
 
