@@ -2331,4 +2331,3 @@ function cleanFileName($str) {
 	return preg_replace("/[^a-z0-9-]/","_",$str).$ext;
 }
 
-?>

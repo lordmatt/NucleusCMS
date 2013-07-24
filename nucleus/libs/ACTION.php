@@ -15,6 +15,7 @@
  *
  * @license http://nucleuscms.org/license.txt GNU General Public License
  * @copyright Copyright (C) 2002-2009 The Nucleus Group
+ * @copyright Copyright (C) 2013 The New Nu Project
  * @version $Id$
  */
 class ACTION
@@ -551,4 +552,3 @@ class ACTION
 
 }
 
-?>
