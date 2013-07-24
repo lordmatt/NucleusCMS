@@ -436,4 +436,3 @@ class BODYACTIONS extends BaseActions {
 	}
 
 }
-?>
