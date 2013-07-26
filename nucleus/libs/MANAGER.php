@@ -25,7 +25,7 @@
 class MANAGER {
 
 	/**
-	 * Cached ITEM, BLOG, PLUGIN, KARMA and MEMBER objects. When these objects are requested
+	 * Cached ITEM, BLOG, PLUGIN and MEMBER objects. When these objects are requested
 	 * through the global $manager object (getItem, getBlog, ...), only the first call
 	 * will create an object. Subsequent calls will return the same object.
 	 *
@@ -37,11 +37,7 @@ class MANAGER {
 	var $plugins;
 	var $templates;
 	var $members;
-        
-        /**
-         * DEPECIATED 
-         */
-	var $karma;
+
 
 	/**
 	 * cachedInfo to avoid repeated SQL queries (see pidInstalled/pluginInstalled/getPidFromName)
@@ -83,11 +79,7 @@ class MANAGER {
 		$this->plugins = array();
 		$this->parserPrefs = array();
 		$this->cachedInfo = array();
-                
-                /**
-                 * DEPECIATED 
-                 */
-		$this->karma = array();
+
 	}
 
 	/**
@@ -182,23 +174,6 @@ class MANAGER {
 			$this->templates[$templateName] =& $template;
 		}
 		return $template;
-	}
-
-	/**
-	 * Returns a KARMA object (karma votes)
-         * DEPRICIATED
-	 */
-	function &getKarma($itemid) {
-		$karma =& $this->karma[$itemid];
-
-		if (!$karma) {
-			// load class if needed
-			$this->_loadClass('KARMA','KARMA.php');
-			// create KARMA object
-			$karma = new KARMA($itemid);
-			$this->karma[$itemid] =& $karma;
-		}
-		return $karma;
 	}
 
 	/**

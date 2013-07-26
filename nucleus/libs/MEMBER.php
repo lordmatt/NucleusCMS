@@ -433,8 +433,9 @@ class MEMBER {
 	}
 
 	/**
-	  * Returns an email address from which notification of commenting/karma voting can
-	  * be sent. A suggestion can be given for when the member is not logged in
+	  * Returns an email address from which notification of commenting can
+	  * be sent. A suggestion can be given for when the member is not logged 
+         *  in.
 	  */
 	function getNotifyFromMailAddress($suggest = "") {
 		global $CONF;
