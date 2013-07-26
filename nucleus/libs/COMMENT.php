@@ -1,5 +1,4 @@
 <?php
-
 /*
  * Nucleus: PHP/MySQL Weblog CMS (http://nucleuscms.org/)
  * Copyright (C) 2002-2007 The Nucleus Group
@@ -107,8 +106,6 @@ class COMMENT {
 		return $body;
 	}
 
-
-
 	/**
 	 * Creates a link code for unlinked URLs with different protocols
 	 *
@@ -165,7 +162,6 @@ class COMMENT {
 		return $pre . '<a href="' . $linkedUrl . '" rel="nofollow">' . shorten($displayedUrl,30,'...') . '</a>' . $post;
 	}
 
-
 	/**
 	 * This method is a callback for creating link codes
 	 * @param array $match
@@ -199,5 +195,3 @@ class COMMENT {
 	}
 
 }
-
-?>

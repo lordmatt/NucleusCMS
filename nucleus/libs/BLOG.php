@@ -379,7 +379,6 @@ class BLOG {
 		$notify->notify($mailto_title, $mailto_msg , $frommail);
 	}
 
-
 	/**
 	  * Creates a new category for this blog
 	  *
@@ -1437,5 +1436,3 @@ class BLOG {
 	}
 
 }
-
-?>

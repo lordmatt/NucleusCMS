@@ -105,6 +105,3 @@ class BANINFO {
 		$this->message = $message;
 	}
 }
-
-
-?>
