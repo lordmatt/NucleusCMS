@@ -680,7 +680,6 @@ define('_NOTIFY_NC_TITLE',			'Nucleus comment:');
 define('_NOTIFY_USERID',			'User ID:');
 define('_NOTIFY_USER',				'User:');
 define('_NOTIFY_COMMENT',			'Comment:');
-define('_NOTIFY_VOTE',				'Vote:');
 define('_NOTIFY_HOST',				'Host:');
 define('_NOTIFY_IP',				'IP:');
 define('_NOTIFY_MEMBER',			'Member:');
@@ -906,7 +905,7 @@ define('_ERROR_COMMENTS_DISABLED',	'Comments for this blog are currently disable
 define('_ERROR_COMMENTS_NONPUBLIC',	'You must be logged in as a member to add comment to this blog');
 define('_ERROR_COMMENTS_MEMBERNICK','The name you want to use to post comments is in use by a site member. Choose something else.');
 define('_ERROR_SKIN',				'Skin error');
-define('_ERROR_ITEMCLOSED',			'This item is closed, it\'s not possible to add new comments to it or to vote on it');
+define('_ERROR_ITEMCLOSED',			'This item is closed, it is not possible to add new comments');
 define('_ERROR_NOSUCHITEM',			'No such item exists');
 define('_ERROR_NOSUCHBLOG',			'No such blog');
 define('_ERROR_NOSUCHSKIN',			'No such skin');
@@ -944,7 +943,7 @@ define('_ERROR_BADACTION',			'Required action does not exist');
 define('_ERROR_MEMBERMAILDISABLED',	'Member to Member mail messages are disabled');
 define('_ERROR_MEMBERCREATEDISABLED','Creation of member accounts is disabled');
 define('_ERROR_INCORRECTEMAIL',		'Incorrect mail address');
-define('_ERROR_VOTEDBEFORE',		'You have already voted for this item');
+
 define('_ERROR_BANNED1',			'Cannot perform action since you (ip range ');
 define('_ERROR_BANNED2',			') are banned from doing so. The message was: \'');
 define('_ERROR_BANNED3',			'\'');
@@ -1325,4 +1324,4 @@ define('_EDITC_NONMEMBER',			'non member');
 define('_MOVE_TITLE',				'Move to which blog?');
 define('_MOVE_BTN',					'Move Item');
 
-?>
+
