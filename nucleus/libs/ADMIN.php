@@ -2602,10 +2602,6 @@ class ADMIN {
                     <?php if  ($blog->notifyOnComment()) echo "checked='checked'" ?>
                 /><label for="notifyComment"><?php echo _EBLOG_NOTIFY_COMMENT?></label>
                 <br />
-                <input name="notifyVote" value="5" type="checkbox" tabindex="82" id="notifyVote"
-                    <?php if  ($blog->notifyOnVote()) echo "checked='checked'" ?>
-                /><label for="notifyVote"><?php echo _EBLOG_NOTIFY_KARMA?></label>
-                <br />
                 <input name="notifyNewItem" value="7" type="checkbox" tabindex="83" id="notifyNewItem"
                     <?php if  ($blog->notifyOnNewItem()) echo "checked='checked'" ?>
                 /><label for="notifyNewItem"><?php echo _EBLOG_NOTIFY_ITEM?></label>

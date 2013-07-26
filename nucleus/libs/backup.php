@@ -52,7 +52,7 @@ class Backup
 						sql_table('comment'),
 						sql_table('config'),
 						sql_table('item'),
-						sql_table('karma'),
+						//sql_table('karma'),
 						sql_table('member'),
 						sql_table('skin'),
 						sql_table('skin_desc'),

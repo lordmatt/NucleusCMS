@@ -673,8 +673,8 @@ define('_RESTORE_COMPLETE',			'Restore Complete');
 // new item notification
 define('_NOTIFY_NI_MSG',			'A new item has been posted:');
 define('_NOTIFY_NI_TITLE',			'New Item!');
-define('_NOTIFY_KV_MSG',			'Karma vote on item:');
-define('_NOTIFY_KV_TITLE',			'Nucleus karma:');
+
+
 define('_NOTIFY_NC_MSG',			'Comment on item:');
 define('_NOTIFY_NC_TITLE',			'Nucleus comment:');
 define('_NOTIFY_USERID',			'User ID:');
@@ -1027,7 +1027,7 @@ define('_EBLOG_ANONYMOUS',			'Allow comments by non-members?');
 define('_EBLOG_NOTIFY',				'Notify Address(es) (use ; as separator)');
 define('_EBLOG_NOTIFY_ON',			'Notify on');
 define('_EBLOG_NOTIFY_COMMENT',		'New comments');
-define('_EBLOG_NOTIFY_KARMA',		'New karma votes');
+
 define('_EBLOG_NOTIFY_ITEM',		'New weblog items');
 define('_EBLOG_PING',				'Ping weblog listing service on update?'); // NOTE: This string is no longer in used
 define('_EBLOG_MAXCOMMENTS',		'Max Amount of comments');
@@ -1188,7 +1188,7 @@ define('_BAN_ADD_TITLE',			'Add Ban');
 define('_BAN_IPRANGE_TEXT',			'Choose the IP range you want to block below. The less numbers in it, the more addresses will be blocked.');
 define('_BAN_BLOGS_TEXT',			'You can either select to ban the IP on one blog only, or you can select to block the IP on all blogs where you have administrator privileges. Make your choice below.');
 define('_BAN_REASON_TITLE',			'Reason');
-define('_BAN_REASON_TEXT',			'You can provide a reason for the ban, which will be displayed when the IP holder tries to add another comment or tries to cast a karma vote. Maximum length is 256 characters.');
+define('_BAN_REASON_TEXT',			'You can provide a reason for the ban, which will be displayed when the IP holder tries to add another comment. Maximum length is 256 characters.');
 define('_BAN_ADD_BTN',				'Add Ban');
 
 // LOGIN screen

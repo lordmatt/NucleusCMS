@@ -74,7 +74,7 @@ class ITEMACTIONS extends BaseActions {
 			'authorid',
 			'authorlink',
 			'catid',
-			'karma',
+			//'karma',
 			'date',
 			'time',
 			'query',
@@ -83,8 +83,8 @@ class ITEMACTIONS extends BaseActions {
 			'closed',
 			'syndicate_title',
 			'syndicate_description',
-			'karmaposlink',
-			'karmaneglink',
+			//'karmaposlink',
+			//'karmaneglink',
 			'new',
 			'image',
 			'popup',
@@ -290,34 +290,28 @@ class ITEMACTIONS extends BaseActions {
 
 	/**
 	 * Parse templatevar karma
+         * DEPRICIATED
 	 */
 	function parse_karma($type = 'totalscore') {
-		global $manager;
-
-		// get karma object
-		$karma =& $manager->getKarma($this->currentItem->itemid);
-
 		switch($type) {
 			case 'pos':
-				echo $karma->getNbPosVotes();
+				echo 0;
 				break;
 			case 'neg':
-				echo $karma->getNbNegVotes();
+				echo 0;
 				break;
 			case 'votes':
-				echo $karma->getNbOfVotes();
+				echo 0;
 				break;
 			case 'posp':
-				$percentage = $karma->getNbOfVotes() ? 100 * ($karma->getNbPosVotes() / $karma->getNbOfVotes()) : 50;
-				echo number_format($percentage,2), '%';
+				echo number_format(50,2), '%';
 				break;
 			case 'negp':
-				$percentage = $karma->getNbOfVotes() ? 100 * ($karma->getNbNegVotes() / $karma->getNbOfVotes()) : 50;
-				echo number_format($percentage,2), '%';
+				echo number_format(50,2), '%';
 				break;
 			case 'totalscore':
 			default:
-				echo $karma->getTotalScore();
+				echo 0;
 				break;
 		}
 
@@ -417,9 +411,7 @@ class ITEMACTIONS extends BaseActions {
 	  * @param string text
 	  */
 	function parse_karmaposlink($text = '') {
-		global $CONF;
-		$link = $CONF['ActionURL'] . '?action=votepositive&amp;itemid='.$this->currentItem->itemid;
-		echo $text ? '<a href="'.$link.'">'.$text.'</a>' : $link;
+		echo $text ? '<b>Karma is Depriciated</b>' : '#';
 	}
 
 	/**
@@ -428,9 +420,7 @@ class ITEMACTIONS extends BaseActions {
 	  * @param string text
 	  */
 	function parse_karmaneglink($text = '') {
-		global $CONF;
-		$link = $CONF['ActionURL'] . '?action=votenegative&amp;itemid='.$this->currentItem->itemid;
-		echo $text ? '<a href="'.$link.'">'.$text.'</a>' : $link;
+		echo $text ? '<b>Karma is Depriciated</b>' : '#';
 	}
 
 	/**

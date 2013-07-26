@@ -62,11 +62,11 @@ class ACTION
 			break;
 
 			case 'votepositive':
-				return $this->doKarma('pos');
+				return 0;
 			break;
 
 			case 'votenegative':
-				return $this->doKarma('neg');
+				return 0;
 			break;
 
 			case 'plugin':
@@ -347,85 +347,7 @@ class ACTION
 	 */
 	function doKarma($type)
 	{
-		global $itemid, $member, $CONF, $manager;
-
-		// check if itemid exists
-		if ( !$manager->existsItem($itemid, 0, 0) )
-		{
-			doError(_ERROR_NOSUCHITEM);
-		}
-
-		$blogid = getBlogIDFromItemID($itemid);
-		$this->checkban($blogid);
-
-		$karma =& $manager->getKarma($itemid);
-
-		// check if not already voted
-		if ( !$karma->isVoteAllowed(serverVar('REMOTE_ADDR') ) )
-		{
-			doError(_ERROR_VOTEDBEFORE);
-		}
-
-		// check if item does allow voting
-		$item =& $manager->getItem($itemid, 0, 0);
-
-		if ( $item['closed'] )
-		{
-			doError(_ERROR_ITEMCLOSED);
-		}
-
-		switch ( $type )
-		{
-			case 'pos':
-				$karma->votePositive();
-			break;
-
-			case 'neg':
-				$karma->voteNegative();
-			break;
-		}
-
-//		$blogid = getBlogIDFromItemID($itemid);
-		$blog =& $manager->getBlog($blogid);
-
-		// send email to notification address, if any
-		if ( $blog->getNotifyAddress() && $blog->notifyOnVote() )
-		{
-
-			$mailto_msg = _NOTIFY_KV_MSG . ' ' . $itemid . "\n";
-//			if ($CONF['URLMode'] == 'pathinfo') {
-//				$itemLink = createItemLink(intval($itemid));
-//			} else {
-//				$itemLink = $CONF['IndexURL'] . createItemLink(intval($itemid));
-//			}
-//			$mailto_msg .= $CONF['IndexURL'] . 'index.php?itemid=' . $itemid . "\n\n";
-			$itemLink = createItemLink(intval($itemid) );
-			$temp = parse_url($itemLink);
-
-			if ( !$temp['scheme'] )
-			{
-				$itemLink = $CONF['IndexURL'] . $itemLink;
-			}
-
-			$mailto_msg .= $itemLink . "\n\n";
-
-			if ( $member->isLoggedIn() )
-			{
-				$mailto_msg .= _NOTIFY_MEMBER . ' ' . $member->getDisplayName() . ' (ID=' . $member->getID() . ")\n";
-			}
-
-			$mailto_msg .= _NOTIFY_IP . ' ' . serverVar('REMOTE_ADDR') . "\n";
-			$mailto_msg .= _NOTIFY_HOST . ' ' .  gethostbyaddr(serverVar('REMOTE_ADDR'))  . "\n";
-			$mailto_msg .= _NOTIFY_VOTE . "\n " . $type . "\n";
-			$mailto_msg .= getMailFooter();
-
-			$mailto_title = _NOTIFY_KV_TITLE . ' ' . strip_tags($item['title']) . ' (' . $itemid . ')';
-
-			$frommail = $member->getNotifyFromMailAddress();
-
-			$notify = new NOTIFICATION($blog->getNotifyAddress() );
-			$notify->notify($mailto_title, $mailto_msg, $frommail);
-		}
+		doError(_ERROR_ITEMCLOSED);
 
 		$refererUrl = serverVar('HTTP_REFERER');
 
@@ -435,7 +357,6 @@ class ACTION
 		}
 		else
 		{
-//			$url = $CONF['IndexURL'] . 'index.php?itemid=' . $itemid;
 			$url = $itemLink;
 		}
 
