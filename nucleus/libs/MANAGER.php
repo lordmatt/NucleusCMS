@@ -35,9 +35,13 @@ class MANAGER {
 	var $items;
 	var $blogs;
 	var $plugins;
-	var $karma;
 	var $templates;
 	var $members;
+        
+        /**
+         * DEPECIATED 
+         */
+	var $karma;
 
 	/**
 	 * cachedInfo to avoid repeated SQL queries (see pidInstalled/pluginInstalled/getPidFromName)
@@ -77,9 +81,13 @@ class MANAGER {
 		$this->items = array();
 		$this->blogs = array();
 		$this->plugins = array();
-		$this->karma = array();
 		$this->parserPrefs = array();
 		$this->cachedInfo = array();
+                
+                /**
+                 * DEPECIATED 
+                 */
+		$this->karma = array();
 	}
 
 	/**
@@ -178,6 +186,7 @@ class MANAGER {
 
 	/**
 	 * Returns a KARMA object (karma votes)
+         * DEPRICIATED
 	 */
 	function &getKarma($itemid) {
 		$karma =& $this->karma[$itemid];
