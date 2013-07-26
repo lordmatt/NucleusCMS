@@ -45,8 +45,8 @@ class ITEM {
 
 		$query =  'SELECT i.idraft as draft, i.inumber as itemid, i.iclosed as closed, '
 			   . ' i.ititle as title, i.ibody as body, m.mname as author, '
-			   . ' i.iauthor as authorid, i.itime, i.imore as more, i.ikarmapos as karmapos, '
-			   . ' i.ikarmaneg as karmaneg, i.icat as catid, i.iblog as blogid '
+			   . ' i.iauthor as authorid, i.itime, i.imore as more, '
+			   . ' i.icat as catid, i.iblog as blogid '
 			   . ' FROM '.sql_table('item').' as i, '.sql_table('member').' as m, ' . sql_table('blog') . ' as b '
 			   . ' WHERE i.inumber=' . $itemid
 			   . ' and i.iauthor=m.mnumber '
