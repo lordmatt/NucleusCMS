@@ -126,9 +126,7 @@ CREATE TABLE `nucleus_item` (
   `itime` datetime NOT NULL default '0000-00-00 00:00:00',
   `iclosed` tinyint(2) NOT NULL default '0',
   `idraft` tinyint(2) NOT NULL default '0',
-  `ikarmapos` int(11) NOT NULL default '0',
   `icat` int(11) default NULL,
-  `ikarmaneg` int(11) NOT NULL default '0',
   `iposted` tinyint(2) NOT NULL default '1',
   PRIMARY KEY  (`inumber`),
 --  UNIQUE KEY `inumber` (`inumber`),
@@ -139,10 +137,6 @@ CREATE TABLE `nucleus_item` (
   FULLTEXT KEY `ibody` (`ibody`,`ititle`,`imore`)
 ) ENGINE=MyISAM PACK_KEYS=0;
 
-CREATE TABLE `nucleus_karma` (
-  `itemid` int(11) NOT NULL default '0',
-  `ip` char(15) NOT NULL default ''
-) ENGINE=MyISAM;
 
 CREATE TABLE `nucleus_member` (
   `mnumber` int(11) NOT NULL auto_increment,
