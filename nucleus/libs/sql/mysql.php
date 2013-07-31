@@ -325,4 +325,3 @@ Unimplemented mysql_* functions
 
 
 }
-?>
